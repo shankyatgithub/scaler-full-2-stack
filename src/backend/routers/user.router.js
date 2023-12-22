@@ -5,7 +5,8 @@ const userRouter = express.Router();
 
 userRouter.get('/', getAllUsers_handler);
 userRouter.post('/', createNewUser_handler);
-//userRouter.get('/:id', getUserById_handler);
+userRouter.get('/:id', getUserById_handler);
+userRouter.patch('/:id',updateUserById_handler)
 
 module.exports = userRouter;
 

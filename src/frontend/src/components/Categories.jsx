@@ -2,9 +2,9 @@ import React from 'react'
 import { usePaginationContext } from '../contexts/PaginationContext'
 
 function Categories(props) {
-    const { categories, setCurrCategory
-    } = props
+    const { categories, setCurrCategory } = props
     const { setPageNum } = usePaginationContext();
+    console.log("in categories", categories)
     return (
         <>
             <button className="category_option"
@@ -13,14 +13,16 @@ function Categories(props) {
                     setPageNum(1);
                 }}
             >All categories</button>
-            {categories.map((category) => {
-                return <button className="category_option"
-                    onClick={() => {
-                        setCurrCategory(category);
-                        setPageNum(1);
-
+            {
+                categories.map((category) => {
+                    return <button className="category_option"
+                        onClick={() => {
+                            setCurrCategory(category.id);
+                            console.log("category set -", category)
+                            setPageNum(1);
                     }}
-                > {category}</button>
+                > {category.name}
+            </button>
             })}
         </>
     )

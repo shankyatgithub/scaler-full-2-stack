@@ -7,6 +7,8 @@ import ProductList from '../components/ProductList';
 import Categories from '../components/Categories';
 import basicOps from '../utility/basicOps';
 import { usePaginationContext } from '../contexts/PaginationContext';
+import axios from 'axios'
+import URL from '../urlConfig'
 
 function Home() {
     // preserver -> pagination
@@ -28,21 +30,47 @@ function Home() {
     /****************get all the products*********************/
     useEffect(() => {
         (async function () {
-            const resp = await fetch(`https://fakestoreapi.com/products`)
-            console.log(resp);
-            const anotherResp = await fetch("/api/product");
+            // const resp = await fetch(`https://fakestoreapi.com/products`)
+            // const productData = await resp.json();
+            // setProducts(productData);
+
+            const productData = await axios.get(URL.GET_PRODUCTS_URL)
+            //console.log("products", products)
+            const productArr = productData.data.data
+            const productList = productArr.map((product) => {
+                return {
+                    id: product._id,
+                    title: product.name,
+                    ...product
+                }
+            })
             
-            const productData = await resp.json();
-            setProducts(productData);
+            setProducts(productList)
+
         })()
     }, [])
 
     /**************getting all the categroies ********************/
     useEffect(() => {
         (async function () {
-            const resp = await fetch(`https://fakestoreapi.com/products/categories`)
-            const categoriesData = await resp.json();
-            setCategories(categoriesData);
+            // console.log("calling categories")
+            // const resp = await fetch(`https://fakestoreapi.com/products/categories`)
+            // const categoriesData = await resp.json();
+            // console.log(categoriesData)
+            // setCategories(categoriesData);
+            
+            console.log("connecting to ", URL.GET_CATEGORIES_URL)
+            const categoriesData = await axios.get(URL.GET_CATEGORIES_URL)
+            //console.log("categories data",categoriesData.data.data)
+            const categoryList = categoriesData.data.data.map((item) => {
+                return {
+                    id: item._id,
+                    name: item.name,
+                    ...item
+                }
+            });
+            console.log(categoryList);
+            setCategories(categoryList);
         })()
     }, [])
     const object = basicOps(products, searchTerm, sortDir, currCategory, pageNum, pageSize);
